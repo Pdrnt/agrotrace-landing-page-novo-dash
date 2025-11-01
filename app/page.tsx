@@ -63,6 +63,14 @@ export default function LandingPage() {
     }
   }
 
+  const handleDashboard2Access = () => {
+    if (user) {
+      router.push("/dashboard2")
+    } else {
+      openAuthModal("login")
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       {/* Header */}
@@ -105,6 +113,13 @@ export default function LandingPage() {
                     className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                   >
                     Dashboard
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleDashboard2Access}
+                    className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+                  >
+                    Dashboard 2
                   </Button>
                   <Button
                     variant="outline"
@@ -164,6 +179,13 @@ export default function LandingPage() {
                       className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
                     >
                       Dashboard
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleDashboard2Access}
+                      className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
+                    >
+                      Dashboard 2
                     </Button>
                     <Button
                       variant="outline"
