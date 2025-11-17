@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
-const OPENWEATHER_API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY
+// NÃO use NEXT_PUBLIC_ para secret keys
+const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY 
 
 export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
@@ -15,13 +16,14 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        console.log(`🌤️ Consultando OpenWeather para lat=${lat}, lon=${lon}`)
+        console.log(`⛅ Buscando previsão para lat=${lat}, lon=${lon}`)
 
+        // Busca a previsão dos próximos 5 dias
         const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=pt_br`,
+            `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OPENWEATHER_API_KEY}&units=metric&lang=pt_br`,
             {
                 headers: { "User-Agent": "AgroTrace/1.0" },
-                signal: AbortSignal.timeout(10000), // timeout de 10s
+                signal: AbortSignal.timeout(10000)
             }
         )
 
@@ -31,20 +33,34 @@ export async function GET(request: NextRequest) {
 
         const data = await response.json()
 
-        const weather = {
-            cidade: data.name,
-            descricao: data.weather[0].description,
-            temperatura: data.main.temp,
-            sensacao: data.main.feels_like,
-            minima: data.main.temp_min,
-            maxima: data.main.temp_max,
-            umidade: data.main.humidity,
-            vento: data.wind.speed,
+        // Encontra o primeiro horário que tenha previsão de chuva
+        const chuva = data.list.find((item: any) => {
+            const main = item.weather[0].main
+            const rainAmount = item.rain?.["3h"] || 0
+            return main === "Rain" || rainAmount > 0
+        })
+
+        // Caso não haja chuva prevista
+        if (!chuva) {
+            return NextResponse.json({
+                vaiChover: false,
+                mensagem: "Não há previsão de chuva nos próximos dias."
+            })
         }
 
-        return NextResponse.json(weather)
+        // Dados da chuva encontrada
+        const dataHora = chuva.dt_txt
+        const descricao = chuva.weather[0].description
+
+        return NextResponse.json({
+            vaiChover: true,
+            data: dataHora,
+            descricao,
+            mensagem: `Existe previsão de chuva em ${dataHora}. Caso ocorra a precipitação faça a análise novamente.`
+        })
+
     } catch (error) {
-        console.error("❌ Erro ao buscar clima:", error)
+        console.error("❌ Erro ao consultar clima:", error)
         return NextResponse.json(
             { error: "Erro ao consultar o clima", details: (error as Error).message },
             { status: 500 }
