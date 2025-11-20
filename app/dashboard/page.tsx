@@ -127,7 +127,7 @@ export default function DashboardPage() {
 
             {/* Technology Overview */}
             <Tabs defaultValue="technology" className="mb-6">
-              <TabsList className="grid grid-cols-4 mb-4">
+              <TabsList className="flex w-full overflow-x-auto mb-4 justify-start md:justify-center h-auto p-1">
                 <TabsTrigger value="technology">Tecnologia</TabsTrigger>
                 <TabsTrigger value="parameters">Parâmetros</TabsTrigger>
                 <TabsTrigger value="sentinel">Sentinel Hub</TabsTrigger>

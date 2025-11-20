@@ -443,7 +443,7 @@ export default function LandingPage() {
                   size="lg"
                   variant="outline"
                   onClick={() => openAuthModal("login")}
-                  className="border-2 border-white text-white hover:bg-white hover:text-green-600 text-lg px-8 py-6 rounded-xl transition-all duration-300"
+                  className="border-2 border-white text-green-600 hover:bg-white hover:text-green-600 text-lg px-8 py-6 rounded-xl transition-all duration-300"
                 >
                   Já tenho conta
                 </Button>
