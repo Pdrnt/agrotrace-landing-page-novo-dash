@@ -1,0 +1,1 @@
+Web platform for agricultural monitoring using remote sensing. The system processes multispectral satellite imagery, soil analysis, and climate data to generate automated agronomic insights that support farm management and decision-making.
